@@ -9,3 +9,4 @@ edition = "2018"
 [dependencies]
 clap = { git = "https://github.com/clap-rs/clap/" }
 num-format = { version = "0.4", features = ["with-system-locale"] }
+num_cpus = "1"

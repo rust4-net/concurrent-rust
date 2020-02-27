@@ -1,7 +1,8 @@
 use clap::Clap;
-use num_format::{Locale, SystemLocale, ToFormattedString};
+use num_format::{SystemLocale, ToFormattedString};
 use std::thread;
 use std::time::{Instant};
+use num_cpus;
 
 
 fn main() {
@@ -14,22 +15,22 @@ fn main() {
 }    
 
 fn calulate_pi(oom: u8) {
-    const THREAD_COUNT: u32 = 5;
-    let factors_per_thread: u32 = 10u32.pow(u32::from(oom));
+    let _thread_count: u64 = num_cpus::get() as u64;
+    let factors_per_thread: u64 = 10u64.pow(u32::from(oom - 1));
 
     // Create vectors of positive and negative denominators
-    let (pos_denoms, neg_denoms) = create_factor_vectors(THREAD_COUNT as u32 * factors_per_thread);
-    // Calculate the number of denominators each thread will process. Up to THREAD_COUNT-1 denominators
+    let (pos_denoms, neg_denoms) = create_factor_vectors(_thread_count as u64 * factors_per_thread);
+    // Calculate the number of denominators each thread will process. Up to _thread_count-1 denominators
     //  might be abandoned for each.
-    let _pos_denoms_window_size = pos_denoms.len() as u32 / THREAD_COUNT;
-    let _neg_denoms_window_size = neg_denoms.len() as u32 / THREAD_COUNT;
+    let _pos_denoms_window_size = pos_denoms.len() as u64 / _thread_count;
+    let _neg_denoms_window_size = neg_denoms.len() as u64 / _thread_count;
 
     // Begin timer
     let beginning = Instant::now();
 
     // Create threads and pass slices of each set of denoms
     let mut hv = Vec::new();
-    for i in 0..THREAD_COUNT {
+    for i in 0.._thread_count {
         let range_start = (i * _neg_denoms_window_size) as usize;
         let range_end = ((i + 1) * _neg_denoms_window_size) as usize;
 
@@ -68,16 +69,16 @@ fn calulate_pi(oom: u8) {
     // Finally, calculate value of pi.
     let pi: f64 = 4.0 * (1.0 - _partial);
     println!("----------------------------------------");
-    println!("pi = {:?}", pi);
+    println!("pi = {:?} which differs from PI constant by {:?} ", pi, diff_of_pi_const(&pi));
     println!("({} factors calculated in {} ms)", 
-        (THREAD_COUNT * factors_per_thread).to_formatted_string(&Locale::en)  //(&SystemLocale::default().unwrap())
+        (_thread_count * factors_per_thread).to_formatted_string(&SystemLocale::default().unwrap())
         , beginning.elapsed().as_millis());
     println!("----------------------------------------");
 
     println!("\nGoodbye. End of program.");
 }
 
-fn create_factor_vectors(factors: u32) -> (Vec<u64>, Vec<u64>) {
+fn create_factor_vectors(factors: u64) -> (Vec<u64>, Vec<u64>) {
     let last_factor = 3 + 2 * factors;
     let pos: Vec<u64> = (3..last_factor).step_by(4).map(u64::from).collect();
     let neg: Vec<u64> = (5..last_factor).step_by(4).map(u64::from).collect();
@@ -92,12 +93,17 @@ struct Opts {
     oom: u8,
 }
 
+const MAX_MAGNITUDE:u8 = 10;  // failure to alloc membry may occur over 10 (e.g., 10^10)
 fn is_valid_magnitude(val: u8) -> Result<(), String> {
-    if val > 0 && val <= 8 {
+    if val > 0 && val <= MAX_MAGNITUDE {
         Ok(())
     } else {
         // clap automatically adds "error: " to the beginning
         // of the message.
         Err(String::from("magnitude must be within range (0-8]."))
     }
+}
+
+fn diff_of_pi_const(calcd_pi:&f64) -> f64 {
+    return calcd_pi - std::f64::consts::PI;
 }

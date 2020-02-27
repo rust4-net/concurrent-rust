@@ -281,6 +281,7 @@ version = "0.1.0"
 dependencies = [
  "clap 3.0.0-beta.1 (git+https://github.com/clap-rs/clap/)",
  "num-format 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "num_cpus 1.12.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -324,6 +325,15 @@ version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "bindgen 0.47.3 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "num_cpus"
+version = "1.12.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+dependencies = [
+ "hermit-abi 0.1.8 (registry+https://github.com/rust-lang/crates.io-index)",
+ "libc 0.2.67 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -591,6 +601,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 "checksum nom 4.2.3 (registry+https://github.com/rust-lang/crates.io-index)" = "2ad2a91a8e869eeb30b9cb3119ae87773a8f4ae617f41b1eb9c154b2905f7bd6"
 "checksum num-format 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)" = "bafe4179722c2894288ee77a9f044f02811c86af699344c498b0840c698a2465"
 "checksum num-format-windows 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)" = "4e179850c4611faf725cc7d92016aa9261a4c9887fc5501812da6cb87297c5eb"
+"checksum num_cpus 1.12.0 (registry+https://github.com/rust-lang/crates.io-index)" = "46203554f085ff89c235cd12f7075f3233af9b11ed7c9e16dfe2560d03313ce6"
 "checksum peeking_take_while 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)" = "19b17cddbe7ec3f8bc800887bab5e717348c95ea2ca0b1bf0837fb964dc67099"
 "checksum proc-macro-error 0.4.9 (registry+https://github.com/rust-lang/crates.io-index)" = "052b3c9af39c7e5e94245f820530487d19eb285faedcb40e0c3275132293f242"
 "checksum proc-macro-error-attr 0.4.9 (registry+https://github.com/rust-lang/crates.io-index)" = "d175bef481c7902e63e3165627123fff3502f06ac043d3ef42d08c1246da9253"
