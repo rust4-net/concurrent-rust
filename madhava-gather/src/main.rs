@@ -8,10 +8,14 @@ use num_cpus;
 fn main() {
     println!("Begin program.");
 
+    let app_timer = Instant::now();
+
     let opts: Opts = Opts::parse();
     if Ok(()) == is_valid_magnitude(opts.oom) {
         calulate_pi(opts.oom);
     }
+
+    println!("\nGoodbye. End of program.  Total execution time: {} ms", app_timer.elapsed().as_millis());
 }    
 
 fn calulate_pi(oom: u8) {
@@ -74,8 +78,6 @@ fn calulate_pi(oom: u8) {
         (_thread_count * factors_per_thread).to_formatted_string(&SystemLocale::default().unwrap())
         , beginning.elapsed().as_millis());
     println!("----------------------------------------");
-
-    println!("\nGoodbye. End of program.");
 }
 
 fn create_factor_vectors(factors: u64) -> (Vec<u64>, Vec<u64>) {
