@@ -91,7 +91,7 @@ fn create_factor_vectors(factors: u64) -> (Vec<u64>, Vec<u64>) {
 #[clap(version = "0.1", author = "Rust4.Net")]
 struct Opts {
     /// Number of Madhava factors to calculate in order of magnitude (10^m)
-    #[clap(short = "m", long = "magnitude", default_value = "6")]
+    #[clap(short = 'm', long = "magnitude", default_value = "6")]
     oom: u8,
 }
 
